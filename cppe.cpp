@@ -49,7 +49,7 @@ int tiles[16];
 int items[14][14];
 int itemOrientation[14][14];
 int path[14][14];
-float fireRate=3;
+float fireRate=3.0;
 
 void processShipExportCode(string shipExportCode){
     //get the tiles
@@ -83,43 +83,117 @@ void processShipExportCode(string shipExportCode){
 
 }
 
-Tree path_fill_function(int currentRow, int currentCol, int currentOrientation, int pathCount){
+Tree path_fill_function(int currentRow, int currentCol, int currentOrientation, int pathCount) {
     Tree path;
     path.root = new tree_node;
     path.root->item_id = items[currentRow][currentCol];
     path.root->item_orientation = itemOrientation[currentRow][currentCol];
     int nextRow = currentRow;
     int nextCol = currentCol;
+    int nextOrientation = currentOrientation;
+    int nextPathCount = pathCount;
+    int nextItem = items[currentRow][currentCol];
     switch (items[currentRow][currentCol])
     {
         ///what the fuck i am doing please help
         //i need to do something different based on if the item is a turn , a spliter or something else 
-        case 5:// a left turn 
+    case 5:// a left turn 
         //check if valid point of entry to next item then
         //do something if there is
+        nextItem=
+        if isValidentry(
 
         
-        if ()
-        
-        break;
-        case 6:// a right turn
+            
+            break;
+    case 6:// a right turn
         //check if valid point of entry to next item then
         //do something if there is
         break;
-        case 14:// a two way spliter 
+    case 14:// a two way spliter 
         //check for a valid point of entry on both sides then
         //do something if there is 
         break;
-        case 17:// a three way spliter 
+    case 17:// a three way spliter 
         //check for valid entry on all 3 sides then 
         //do something if there is 
         break;
-        case 22:// the random two way spliter 
+    case 22:// the random two way spliter 
         //check for a valid point of entry on both sides then
         //do something if there is 
         break;
-        case default:
+    case default://continue in the same direction if next item has a valid entry point
+
 
     }
+}
+    bool isValidentry(int direction, int currentRow, int currentCol) {
+        // Check for valid directions and adjust currentRow and currentCol accordingly
+        switch (direction) {
+        case 0: // Up
+            currentRow--;
+            break;
+        case 1: // Right
+            currentCol++;
+            break;
+        case 2: // Down
+            currentRow++;
+            break;
+        case 3: // Left
+            currentCol--;
+            break;
+        default:
+            return false; // Invalid direction
+        }
+
+        // Check if the new position is out of bounds
+        if (currentRow < 0 || currentRow >= numRows || currentCol < 0 || currentCol >= numCols) {
+            return false;
+        }
+
+        // Check the item orientation
+        int currentOrientation = itemOrientation[currentRow][currentCol];
+        int currentItem = items[currentRow][currentCol];
+
+        // Check the conditions based on the direction and orientation
+        switch (direction) {
+        case 0: // Up
+            switch (currentOrientation) {
+            case 0: // Up
+                return (currentItem == 0 || currentItem == 29 || currentItem == 30 || currentItem == 3);
+            case 2: // Down
+                return (currentItem == 0 || currentItem == 3);
+            default: // Left or Right
+                return (currentItem == 0 || currentItem == 29 || currentItem == 30 || currentItem == 3);
+            }
+        case 1: // Right
+            switch (currentOrientation) {
+            case 1: // Right
+                return (currentItem == 0 || currentItem == 29 || currentItem == 30 || currentItem == 3);
+            case 3: // Left
+                return (currentItem == 0 || currentItem == 3);
+            default: // Up or Down
+                return (currentItem == 0 || currentItem == 29 || currentItem == 30 || currentItem == 3);
+            }
+        case 2: // Down
+            switch (currentOrientation) {
+            case 0: // Up
+                return (currentItem == 0 || currentItem == 3);
+            case 2: // Down
+                return (currentItem == 0 || currentItem == 29 || currentItem == 30 || currentItem == 3);
+            default: // Left or Right
+                return (currentItem == 0 || currentItem == 3);
+            }
+        case 3: // Left
+            switch (currentOrientation) {
+            case 1: // Right
+                return (currentItem == 0 || currentItem == 3);
+            case 3: // Left
+                return (currentItem == 0 || currentItem == 29 || currentItem == 30 || currentItem == 3);
+            default: // Up or Down
+                return (currentItem == 0 || currentItem == 3);
+            }
+        }
+
+        return false; // Default case, should not reach here
     }
-bool isValidentry(int direction , int currentRow, int current col
